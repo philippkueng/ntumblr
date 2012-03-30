@@ -1,0 +1,23 @@
+{ 
+  "name": "ntumblr", 
+  "version": "0.0.1",
+  "description": "Asynchronous Tumblr REST client API for node.js.", 
+  "keywords": ["tumblr","oauth"], 
+  "homepage": "https://github.com/mnmly/ntumblr", 
+  "author": "mnmly", 
+  "licenses": { 
+    "type": "MIT", 
+    "url": "http://github.com/mnmly/ntumblr/raw/master/LICENSE"
+  },
+  "repository": { 
+    "type": "git", 
+    "url": "http://github.com/mnmly/ntumblr.git"
+  }, 
+  "dependencies": { 
+    "oauth": ">=0.8.4", 
+    "cookies": "0.1.x",
+    "keygrip": "0.1.x"
+  }, 
+  "engines": {"node":">=0.4.0 < 0.7.0"}, 
+  "main": "./lib/tumblr"
+}
