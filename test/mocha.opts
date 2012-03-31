@@ -1,7 +1,5 @@
 --require should
 --reporter spec
 --ui bdd
---growl
---globals okGlobalA,okGlobalB
---timeout 2000
 --ignore-leaks 
+--compilers coffee:coffee-script

@@ -69,9 +69,8 @@ class TumblrAPI:
         self.oauth_gen('POST',uri,params,headers)
         conn = httplib.HTTPConnection(machine)
         #URL Encode the paramers and  make sure and kill any trailing slashes.
-        import ipdb
-        ipdb.set_trace()
         conn.request('POST',uri,urllib.urlencode(params).replace('/','%2F'),headers);
+        print urllib.urlencode(params).replace('/','%2F')
         return conn.getresponse()
 
     def createPost(self,id,params={}):

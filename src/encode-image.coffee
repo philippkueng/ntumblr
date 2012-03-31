@@ -1,4 +1,5 @@
 fs      = require('fs')
+qs      = require('querystring')
 
 toHex = (n) ->
   return "0" + n.toString(16)  if n < 16
@@ -25,8 +26,8 @@ _hexSlice = (buffer, start, end) ->
   out
 
 module.exports = encodeImage = (buffer)->
-  encodeURIComponent( _hexSlice(buffer) ).replace(/0x/gi, '%').replace(/%20/gi, '+')
-
+  _hexSlice(buffer)
+  #encodeURIComponent( _hexSlice(buffer) ).replace(/0x/gi, '%').replace(/%20/gi, '+')
 
 ###
 encoded = 'data%5B0%5D=' + encodeURIComponent( _hexSlice( fs.readFileSync('photo.jpg') ) ).replace(/0x/gi, '%').replace(/%20/gi, '+') + '&type=photo'
