@@ -1,7 +1,7 @@
 fs     = require('fs')
 config =  JSON.parse(fs.readFileSync('config.json'))
 
-{print} = require 'sys'
+{print} = require 'util'
 {spawn} = require 'child_process'
 
 build = (callback) ->
