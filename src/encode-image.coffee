@@ -25,9 +25,14 @@ _hexSlice = (buffer, start, end) ->
     i++
   out
 
-module.exports = encodeImage = (buffer)->
+module.exports.encodeData = (buffer)->
   "data:" + _hexSlice(buffer)
   #encodeURIComponent( _hexSlice(buffer) ).replace(/0x/gi, '%').replace(/%20/gi, '+')
+
+module.exports.replaceAfterEncode = (str)->
+  str.replace /data%3A([%\w]+)/g, (a, g) ->
+    g.replace(/0X/g, "%").replace /%20/g, "+"
+  
 
 ###
 encoded = 'data%5B0%5D=' + encodeURIComponent( _hexSlice( fs.readFileSync('photo.jpg') ) ).replace(/0x/gi, '%').replace(/%20/gi, '+') + '&type=photo'

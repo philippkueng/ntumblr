@@ -1,7 +1,7 @@
 { 
   "name": "ntumblr", 
   "version": "0.0.1",
-  "description": "Asynchronous Tumblr REST client API for node.js.", 
+  "description": "Tumblr REST client API for node.js.", 
   "keywords": ["tumblr","oauth"], 
   "homepage": "https://github.com/mnmly/ntumblr", 
   "author": "mnmly", 
@@ -15,9 +15,12 @@
   }, 
   "dependencies": { 
     "oauth": ">=0.8.4", 
-    "cookies": "0.1.x",
-    "keygrip": "0.1.x"
   }, 
+  "devDependencies": {
+    "coffee-script": ">= 1.0.0",
+    "express": ">=2.5.8",
+    "mocha": ">=1.0.0"
+  }
   "engines": {"node":">=0.4.0 < 0.7.0"}, 
-  "main": "./lib/tumblr"
+  "main": "./index"
 }

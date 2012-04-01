@@ -13,3 +13,4 @@ build = (callback) ->
 
 task 'build', 'Build lib/ from src/', ->
   build()
+

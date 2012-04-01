@@ -1,5 +1,7 @@
 # node.js tumblr API client
 
+Inspired by [ ntwitter ](https://github.com/AvianFlu/ntwitter).
+
 ## Installation
 
     npm install ntumblr
@@ -9,7 +11,8 @@
 
 `consumerKey` and `consumerSecret` can be obtained from [Tumblr](http://www.tumblr.com/oauth/apps).
 
-`accessTokenKey` and `accessTokenSecret` can be obtained via [OAuth](http://www.tumblr.com/docs/en/api/v2#oauth).
+`accessTokenKey` and `accessTokenSecret` can be obtained via [OAuth](http://www.tumblr.com/docs/en/api/v2#oauth): instruction is [ below ](#access-token).
+
 Minimal server that returns your `accessTokenKey` and `accessTokenSecret` can be found at `/server/app.coffee`
         
     Tumblr = require('ntumblr')
@@ -107,3 +110,16 @@ __Requires `AccessTokenKey` and `AccessTokenSecret`__
 
       if meta.status is 201 then console.log meta.msg is 'Created'
       newPostId = response.id
+
+
+### Test
+**Make sure you have got [access tokens](#access-token)**
+
+    $ mocha
+
+### Getting Access Tokens<a name="access-token"></a>
+
+1. Copy `config-sample.json` to `config.json` and fill required fields
+2. Run simple server by `coffee server` then go to `http://localost:3000` to allow the app.
+3. Check your `config.json`. it should have access tokens in place.
+4. You can run test by `$ mocha` :)

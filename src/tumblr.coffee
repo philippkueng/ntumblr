@@ -4,7 +4,9 @@ oauth       = require('oauth')
 querystring = require('querystring')
 utils       = require('./utils')
 keys        = require('./keys')
-encodeImage = require('./encode-image')
+
+{ encodeData,
+  replaceAfterEncode } = require('./encode-image')
 
 class Tumblr
 
@@ -54,8 +56,7 @@ class Tumblr
       unless not toEncode? or toEncode is ""
         result = encodeURIComponent(toEncode)
         if typeof toEncode is "string" and toEncode.search(/data%3A/) > -1
-          result = toEncode.replace /data%3A([%\w]+)/g, (a, g) ->
-            g.replace(/0X/g, "%").replace /%20/g, "+"
+          result = replaceAfterEncode(result)
         result.replace(/\!/g, "%21").replace(/\'/g, "%27").replace(/\(/g, "%28").replace(/\)/g, "%29").replace /\*/g, "%2A"
     
     # Needs to treat binary data a bit differently that others
@@ -66,8 +67,7 @@ class Tumblr
       # Need to format binary data
       request.write = (chunk, encoding) ->
         if chunk.search(/data%3A/) > -1
-          chunk = chunk.replace /data%3A([%\w]+)/gi, (a, g)->
-            g.replace(/0X/gi, '%').replace(/%20/gi, '+')
+          chunk = replaceAfterEncode(chunk)
 
         # Content-Length should be changed as we replaced some bits of chunk
         contentLength = 0
@@ -93,10 +93,10 @@ class Tumblr
     if content.data?
       if Array.isArray( content.data )
         for d, i in content.data
-          content["data[#{i}]"] = encodeImage(d)
+          content["data[#{i}]"] = encodeData(d)
         delete content.data
       else
-        content.data = encodeImage(content.data)
+        content.data = encodeData(content.data)
     @oauth.post @getUrlFor('post'),
       @options.accessTokenKey,
       @options.accessTokenSecret,

@@ -71,9 +71,9 @@ class TumblrAPI:
         conn = httplib.HTTPConnection(machine)
         #URL Encode the paramers and  make sure and kill any trailing slashes.
         conn.request('POST',uri,urllib.urlencode(params).replace('/','%2F'),headers);
-        import ipdb
-        ipdb.set_trace()
-        print urllib.urlencode(params).replace('/','%2F')
+        f = open('test/url-encoded-image.txt', 'w')
+        f.write(urllib.urlencode(params).replace('/','%2F').replace('&type=photo', '').replace('data%5B0%5D=', ''))
+        f.close()
         return conn.getresponse()
 
     def createPost(self,id,params={}):
@@ -85,12 +85,16 @@ class TumblrAPI:
             raise Exception('response code is %d - %s' % (resp.status,resp.read()));
         return json.loads(resp.read())['response']
 
+json_data = open('config.json')
+data = json.load(json_data)
 
-cred = { "consumer_key" : 'x56Z0RyDupIM0bdmGG2rnPQl74NX14re1PMZgIQwRilAaGINtB',
-        'secret_key' : 'dSGg8XYuGhuZceyNXUQ3aNTh5gPVzpvs3aVJIjtodpAERJd54k',
-        'oauth_token' : 'uUNQMGrbq5fSB4t1Xj8YEiPwSxUvtFTRZKiceB7f5WcZsoXo3C',
-        'oauth_token_secret' :  '0CHrRuFK9FCpKxbRNzsJVjpEDWmU5VVRpy6ZFWQLzidRNQgHwj'}
-blogname = 'square.mnmly.com'
+cred = { "consumer_key" : data[ 'consumerKey' ],
+        'secret_key' : data[ 'secretKey' ],
+        'oauth_token' : data['accessToken'],
+        'oauth_token_secret' :  data['accessTokenSecret']}
+blogname = data['host']
+
+json_data.close()
 
 api = TumblrAPI(cred)
 
