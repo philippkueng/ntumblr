@@ -1,4 +1,4 @@
-# node.js tumblr API client
+# Tumblr REST client API for node.js
 
 Inspired by [ ntwitter ](https://github.com/AvianFlu/ntwitter).
 
