@@ -14,13 +14,13 @@
     "url": "http://github.com/mnmly/ntumblr.git"
   }, 
   "dependencies": { 
-    "oauth": ">=0.8.4", 
+    "oauth": ">=0.8.4"
   }, 
   "devDependencies": {
     "coffee-script": ">= 1.0.0",
     "express": ">=2.5.8",
     "mocha": ">=1.0.0"
-  }
+  },
   "engines": {"node":">=0.4.0 < 0.7.0"}, 
   "main": "./index"
 }
