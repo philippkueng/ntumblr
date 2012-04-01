@@ -58,6 +58,7 @@ class TumblrAPI:
         params['oauth_token']= self.oauth_token
         params['oauth_signature'] = self.oauth_sig(method,'http://'+headers['Host'] + url, params)
         headers['Authorization' ] =  'OAuth ' + ',  '.join(['%s="%s"' %(k,v) for k,v in params.iteritems() if 'oauth' in k ])
+        print headers
     
     def _postOAuth(self,url,params={}):
         """
@@ -70,6 +71,8 @@ class TumblrAPI:
         conn = httplib.HTTPConnection(machine)
         #URL Encode the paramers and  make sure and kill any trailing slashes.
         conn.request('POST',uri,urllib.urlencode(params).replace('/','%2F'),headers);
+        import ipdb
+        ipdb.set_trace()
         print urllib.urlencode(params).replace('/','%2F')
         return conn.getresponse()
 

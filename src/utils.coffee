@@ -8,7 +8,6 @@ exports.merge = (defaults) ->
     continue if i is 0
     for key, val of obj
       defaults[key] = val
-      console.log key, val
 
   defaults
 

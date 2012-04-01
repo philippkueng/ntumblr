@@ -3,3 +3,4 @@
 --ui bdd
 --ignore-leaks 
 --compilers coffee:coffee-script
+--timeout 8000

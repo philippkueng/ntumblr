@@ -1,11 +1,13 @@
 http    = require('http')
 fs      = require('fs')
-Iconv   = require('iconv').Iconv
 config = JSON.parse( fs.readFileSync('config.json', 'utf-8') )
+
 express = require("express")
+
 Tumblr  = require('./src/tumblr')
-multipartEncode = require('./src/multipart-encode')
+
 encodeImage = require('./src/encode-image')
+
 OAuth = require("oauth").OAuth
 
 config =
@@ -94,39 +96,65 @@ tumblr = new Tumblr
   consumerSecret: config.secret_key
   accessTokenKey: config.oauth_access_token
   accessTokenSecret: config.oauth_access_token_secret
+  host: 'square.mnmly.com'
 
 postImage = ->
   img = fs.readFileSync('photo.jpg')
-  boundary = 'myboundary'
-  body = """
-  --#{boundary}
-  Content-Disposition: form-data; name=\"type\"\r
-  "text\r\n"
-  """
-  body += "--#{boundary}\r\n"
-  body += "Content-Disposition: form-data; name=\"type\"\r\n"
-  body += "\r\n"
-  #body += "photo\r\n"
-  body += "text\r\n"
-  body += "--#{boundary}\r\n"
-  #body += "Content-Disposition: form-data; name=\"data[0]\"; filename=\"photo\"\r\n"
-  #body += "Content-Type: application/octet-stream\r\n"
-  #body += "\r\n"
-  #body += new Buffer( img, 'utf-8' )
-  #body += "\r\n"
-  #body += "--#{boundary}--\r\n"
-  #body =
-  #  'data[0]': encodeImage(img)
-  #  type: 'photo'
-  #  #source: 'http://29.media.tumblr.com/tumblr_lx1tnqatVp1qkgyddo1_500.jpg'
-  #body =
-  #  type: 'text'
-  #  body: "test"
-  #console.log buffer
-  #body = "data[0]=data:#{ encodeImage(img) }&type=photo&state=draft"
-  #body = "source=#{ encodeURIComponent('http://29.media.tumblr.com/tumblr_lx1tnqatVp1qkgyddo1_500.jpg') }&type=photo&state=draft"
-  console.log body
-  console.log "start posting"
-  tumblr.post body, "multipart/form-data; boundary=#{boundary}"
 
+  body =
+    data: [ img, img ]
+    type: 'photo'
+
+  ###
+  body =
+    type: 'text'
+    status: 'draft'
+    body: 'testing'
+  ###
+  console.log body
+  tumblr.post body, (err, data)->
+    console.log('post ', data)
+  ###
+  tumblr.get 'info', (err, data, response)->
+    throw new Error(err) if err?
+    blogInfoData = JSON.parse( data ).response.blog
+    { title,
+      post,
+      name,
+      url,
+      updated,
+      description,
+      ask,
+      ask_anon,
+      likes } = blogInfoData
+    console.log title, post, name, url, updated
+    
+  tumblr.get 'posts', type:'photo', (err, data, response)->
+    postObj =
+      type: 'text'
+      title: 'Demo Post'
+      body: 'Having a nice day :D'
+      status: 'draft'
+
+    tumblr.post postObj, (err, data, response)->
+      {
+        meta,
+        response
+      } = JSON.parse(data)
+
+      if meta.status is 201 then console.log meta.msg is 'Created'
+      newPostId = response.id
+      console.log newPostId
+
+  tumblr.get 'posts', type: 'text', (err, data, response)->
+    console.log 'get post:text', JSON.stringify( JSON.parse( data ), null, 2 )
+  
+  tumblr.get 'posts', limit: 1, (err, data, response)->
+    console.log 'get post limited to 1', JSON.stringify( JSON.parse( data ), null, 2 )
+  
+  tumblr.get 'posts', type: 'draft', (err, data, response)->
+    console.log 'get draft post', JSON.stringify( JSON.parse( data ), null, 2 )
+  tumblr.get 'user/info', (err, data, response)->
+    console.log 'get user info', JSON.stringify( JSON.parse( data ), null, 2 )
+  ###
 postImage()

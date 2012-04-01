@@ -26,7 +26,7 @@ _hexSlice = (buffer, start, end) ->
   out
 
 module.exports = encodeImage = (buffer)->
-  _hexSlice(buffer)
+  "data:" + _hexSlice(buffer)
   #encodeURIComponent( _hexSlice(buffer) ).replace(/0x/gi, '%').replace(/%20/gi, '+')
 
 ###

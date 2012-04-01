@@ -1,15 +1,20 @@
 VERSION     = '0.0.1'
 
-http        = require('http')
-querystring = require('querystring')
 oauth       = require('oauth')
+querystring = require('querystring')
 utils       = require('./utils')
 keys        = require('./keys')
+encodeImage = require('./encode-image')
 
 class Tumblr
 
   @VERSION = VERSION
-
+  BASE     = "http://api.tumblr.com/v2/"
+  
+  _isFunction = (fn)->
+    getType = {}
+    fn and getType.toString.call(fn) is "[object Function]"
+  
   defaults =
     consumerKey: null
     consumerSecret: null
@@ -17,78 +22,117 @@ class Tumblr
     accessTokenSecret: null
     headers:
       'Accept-Encoding': 'identity'
-
     secure: no
     cookie: 'tbauth'
     cookieOptions: {}
     cookieSecret: null
 
   constructor: (options)->
-    @options = utils.merge(defaults, options, keys.urls)
+
+    @options  = utils.merge(defaults, options, keys.urls)
+    @host     = @options.host
+    @baseBlog = "#{BASE}blog/#{@host}/"
+
     @oauth    = new oauth.OAuth(
       @options.requestTokenUrl,
       @options.accessTokenUrl,
       @options.consumerKey,
-     @options.consumerSecret,
-      '1.0', null, 'HMAC-SHA1', null, defaults.headers
+      @options.consumerSecret,
+      '1.0', null, 'HMAC-SHA1', null, @options.headers
     )
-    ###
-    _createClient = @oauth._createClient
+    
+    @modifyOAuthMethods()
+
+  # As Tumblr only accepts url-encoded binary data,
+  # we need to modify some of the oauth encoding methods
+  modifyOAuthMethods: ->
+
+    _createClient = @oauth._createClient.bind(@oauth)
+    
+    # Fix encodeData
+    @oauth._encodeData = (toEncode) ->
+      unless not toEncode? or toEncode is ""
+        result = encodeURIComponent(toEncode)
+        if typeof toEncode is "string" and toEncode.search(/data%3A/) > -1
+          result = toEncode.replace /data%3A([%\w]+)/g, (a, g) ->
+            g.replace(/0X/g, "%").replace /%20/g, "+"
+        result.replace(/\!/g, "%21").replace(/\'/g, "%27").replace(/\(/g, "%28").replace(/\)/g, "%29").replace /\*/g, "%2A"
+    
     # Needs to treat binary data a bit differently that others
     @oauth._createClient = ( port, hostname, method, path, headers, sshEnabled )=>
-      requestModel = _createClient(port, hostname, method, path, headers, sshEnabled)
-      _write = requestModel.write
-      
-      requestModel.write = (postBody)->
-        
-        param   = 'data%5B0%5D=%FF%D8%FF%E0%00%10JFIF%00%01%01%01%00H%00H%00%00%FF%DB%00C%00%06%04%04%04%05%04%06%05%05%06%09%06%05%06%09%0B%08%06%06%08%0B%0C%0A%0A%0B%0A%0A%0C%10%0C%0C%0C%0C%0C%0C%10%0C%0E%0F%10%0F%0E%0C%13%13%14%14%13%13%1C%1B%1B%1B%1C++++++++++%FF%DB%00C%01%07%07%07%0D%0C%0D%18%10%10%18%1A%15%11%15%1A+++++++++++++++++++++++++++++++++++++++++++++++++%FF%C0%00%11%08%00%02%00%02%03%01%11%00%02%11%01%03%11%01%FF%C4%00%14%00%01%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%08%FF%C4%00%14%10%01%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%FF%C4%00%14%01%01%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%FF%C4%00%14%11%01%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%FF%DA%00%0C%03%01%00%02%11%03%11%00%3F%00T%83%FF%D9&type=photo'
-        good     = param.replace('&type=photo', '').replace('data%5B0%5D=', '')
-        returned = postBody.replace('type=photo&state=draft&data%5B0%5D=', '')
-      requestModel.write = (chunk, encoding) ->
-        chunk = chunk.replace(/data%3A/, "").replace(/%2B/g, "+").replace(/%25/g, "%")
-        @_implicitHeader()  unless @_header
-        unless @_hasBody
-          console.error "This type of response MUST NOT have a body. " + "Ignoring write() calls."
-          return true
-        throw new TypeError("first argument must be a string or Buffer")  if typeof chunk isnt "string" and not Buffer.isBuffer(chunk)
-        return false  if chunk.length is 0
-        len = undefined
-        ret = undefined
-        if @chunkedEncoding
-          if typeof (chunk) is "string"
-            len = Buffer.byteLength(chunk, encoding)
-            chunk = len.toString(16) + CRLF + chunk + CRLF
-            ret = @_send(chunk, encoding)
-          else
-            len = chunk.length
-            @_send len.toString(16) + CRLF
-            @_send chunk
-            ret = @_send(CRLF)
+
+      request = _createClient(port, hostname, method, path, headers, sshEnabled)
+      _write  = request.write.bind(request)
+      # Need to format binary data
+      request.write = (chunk, encoding) ->
+        if chunk.search(/data%3A/) > -1
+          chunk = chunk.replace /data%3A([%\w]+)/gi, (a, g)->
+            g.replace(/0X/gi, '%').replace(/%20/gi, '+')
+
+        # Content-Length should be changed as we replaced some bits of chunk
+        contentLength = 0
+        if Buffer.isBuffer(chunk)?
+          contentLength = chunk.length
         else
-          ret = @_send(chunk, encoding)
-        ret
-      requestModel
-      ###
-
-
-  get: (url)->
-    @oauth.get url,
+          contentLength = Buffer.byteLength(chunk)
+        @setHeader "Content-Length", contentLength
+        _write(chunk, encoding)
+      request
+  
+  get: (action, options, callback)->
+    if ( not callback? ) and _isFunction( options )
+      callback = options
+    # user info can be retrieved via POST
+    method = if /user/.test(action) then 'post' else 'get'
+    @oauth[method] @getUrlFor(action, options),
       @options.accessTokenKey,
       @options.accessTokenSecret,
-      (error, data, response)->
-        console.log data
-
-  post: (content, contentType = "application/x-www-form-urlencoded")->
-    @oauth.post "http://api.tumblr.com/v2/blog/square.mnmly.com/post",
+      callback
+  
+  post: (content, callback)->
+    if content.data?
+      if Array.isArray( content.data )
+        for d, i in content.data
+          content["data[#{i}]"] = encodeImage(d)
+        delete content.data
+      else
+        content.data = encodeImage(content.data)
+    @oauth.post @getUrlFor('post'),
       @options.accessTokenKey,
       @options.accessTokenSecret,
-      content, contentType
-      (error, data, response)->
-        console.log data
+      content, "application/x-www-form-urlencoded",
+      callback
+  
+  edit: (content, callback)->
+    @oauth.post @getUrlFor('post/edit'),
+      @options.accessTokenKey,
+      @options.accessTokenSecret,
+      content, "application/x-www-form-urlencoded",
+      callback
+  
+  delete: (postId, callback)->
+    @oauth.post @getUrlFor('post/delete'),
+      @options.accessTokenKey,
+      @options.accessTokenSecret,
+      content, "application/x-www-form-urlencoded",
+      callback
 
-    
-  getInfo: ->
-    @get("http://api.tumblr.com/v2/blog/square.mnmly.com/info")
-  
-  
+  getUrlFor: (action, options)->
+    if /post(?!s)/.test(action)
+      return "#{@baseBlog}#{action}"
+    else
+      isUser = /user/.test(action)
+      _url   = "#{if isUser then BASE else @baseBlog}"
+      _url  += "#{action}/"
+
+      # If Oauth is not required, add the API key
+      unless ( options?.type? in ['draft', 'queue', 'submission'] or isUser )
+        _url += "?api_key=#{@options.consumerKey}"
+
+      if options?
+        query = querystring.stringify(options)
+        if query isnt ''
+          _url += "&#{ query }"
+      _url
+
 module.exports = Tumblr
