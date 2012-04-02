@@ -101,7 +101,7 @@ describe "Tumblr", ->
 
     postObj =
       type: 'photo'
-      data: fs.readFileSync('test/photo.jpg')
+      data: fs.readFileSync('test/assets/photo.jpg')
 
     @tumblr.post postObj, (err, data, response)->
       data = JSON.parse(data)
