@@ -120,7 +120,7 @@ __Requires `AccessTokenKey` and `AccessTokenSecret`__
 ### Getting Access Tokens<a name="access-token"></a>
 
 1. Copy `config-sample.json` to `config.json` and fill required fields
-2. Run simple server by `coffee server` then go to `http://localost:3000` to allow the app.
+2. Run simple server by `coffee server` then go to `http://localhost:3000` to allow the app.
 3. Check your `config.json`. it should have access tokens in place.
 4. You can run test by `$ mocha` :)
 
