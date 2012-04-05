@@ -45,6 +45,8 @@ describe "Tumblr", ->
           'tags'
           'highlighted'
           'note_count'
+          'can_reply'
+          'liked'
         ]
         switch post.type
           when 'text'
@@ -80,7 +82,7 @@ describe "Tumblr", ->
       post.should.have.lengthOf(1)
       post[0].type.should.equal('text')
       done()
-
+  
   it "should create new Text Post as draft", (done)->
     postObj =
       type: 'text'
@@ -96,7 +98,58 @@ describe "Tumblr", ->
       data.response.should.have.property('id')
       done()
 
+  it "should delete a post", (done)->
+
+    postObj =
+      type: 'text'
+      title: 'Demo Post'
+      body: 'Having a nice day :D'
+
+    @tumblr.post postObj, (err, data, response)=>
+      data = JSON.parse(data)
+      newPostId = data.response.id
+
+      #console.log "new Post is created"
+
+      @tumblr.delete id: newPostId, (err, data, response)->
+        data = JSON.parse(data)
+        data.meta.should.have.property('status', 200)
+        data.meta.should.have.property('msg', "OK")
+
+        done()
+
   
+  it "should edit a post", (done)->
+
+    postObj =
+      type: 'text'
+      title: 'Edit Demo Post'
+      body: 'Having a nice day :D'
+
+    @tumblr.post postObj, (err, data, response)=>
+      data = JSON.parse(data)
+      newPostId = data.response.id
+
+      #console.log "new Post is created"
+      
+      postObj =
+        id: newPostId
+        title: 'Edit Demo Post Edited'
+
+      @tumblr.edit postObj, (err, data, response)=>
+        data = JSON.parse(data)
+        data.meta.should.have.property('status', 200)
+        data.meta.should.have.property('msg', "OK")
+        #console.log "Post edited"
+
+        @tumblr.get 'posts', id: newPostId, (err, data, response)=>
+          postsData = JSON.parse(data).response.posts
+          postsData[0].should.have.property('title', 'Edit Demo Post Edited')
+          
+          @tumblr.delete id: newPostId, (err, data, response)=>
+            #console.log "Post Deleted"
+            done()
+
   it "should create new Photo Post", (done)->
 
     postObj =

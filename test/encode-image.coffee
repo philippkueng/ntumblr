@@ -1,10 +1,10 @@
 fs          = require('fs')
 encodedTxt  = fs.readFileSync('test/assets/url-encoded-image.txt').toString('utf-8')
 photo       = fs.readFileSync('test/assets/photo.jpg')
-{ encodeData, replaceAfterEncode } = require('./../src/encode-image')
+{ encodeToHex, replaceAfterEncode } = require('./../src/encode-image')
 
-describe "encodeData", ->
+describe "encodeToHex", ->
   it "should encode image as same as python's dump", ->
-    encodedString = encodeURIComponent( encodeData(photo) )
+    encodedString = encodeURIComponent( encodeToHex(photo) )
     encodedString = replaceAfterEncode( encodedString )
     encodedTxt.should.equal encodedString
