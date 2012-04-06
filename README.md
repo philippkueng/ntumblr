@@ -94,7 +94,7 @@ __Requires `AccessTokenKey` and `AccessTokenSecret`__
       if meta.status is 201 then console.log meta.msg is 'Created'
       newPostId = response.id
 
-#### Creating new Photo Post *doesn't work yet*
+#### Creating new Photo Post
 
 __Requires `AccessTokenKey` and `AccessTokenSecret`__
 
