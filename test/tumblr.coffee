@@ -149,7 +149,7 @@ describe "Tumblr", ->
           @tumblr.delete id: newPostId, (err, data, response)=>
             #console.log "Post Deleted"
             done()
-
+  
   it "should create new Photo Post", (done)->
 
     postObj =

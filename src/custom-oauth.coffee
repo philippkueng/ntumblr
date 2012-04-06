@@ -2,7 +2,12 @@ OAuth               = require('oauth').OAuth
 replaceAfterEncode  = require('./encode-image').replaceAfterEncode
 
 class CustomOAuth extends OAuth
-  
+
+  _createSignatureBase: ->
+    _signatureBase = super
+    _signatureBase.replace(/%2B/g, '%2520')
+                  .replace(/data%255B(\d+)%255D/gi, "data%5B$1%5D")
+
   _encodeData: (toEncode)->
     result = super(toEncode)
     # if this is binary data, treat it a bit differently
@@ -32,6 +37,7 @@ class CustomOAuth extends OAuth
       else
         contentLength = Buffer.byteLength(chunk)
       @setHeader "Content-Length", contentLength
+      @removeHeader "Connection"
       _write(chunk, encoding)
 
     client

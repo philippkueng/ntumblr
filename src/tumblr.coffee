@@ -34,7 +34,6 @@ class Tumblr
     @host     = @options.host
     @baseBlog = "#{BASE}blog/#{@host}/"
 
-    debugger
     @oauth    = new CustomOAuth(
       @options.requestTokenUrl,
       @options.accessTokenUrl,
@@ -61,7 +60,8 @@ class Tumblr
           content["data[#{i}]"] = encodeToHex(d)
         delete content.data
       else
-        content.data = encodeToHex(content.data)
+        content[ 'data[0]' ] = encodeToHex(content.data)
+        delete content.data
     @oauth.post @getUrlFor('post'),
       @options.accessTokenKey,
       @options.accessTokenSecret,

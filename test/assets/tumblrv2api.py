@@ -43,6 +43,7 @@ class TumblrAPI:
             [urllib.quote(k) +'%3D'+ urllib.quote(params[k]).replace('/','%2F') for k in sorted(params.keys())]
         )
         s = s.replace('%257E','~')
+        print s
         return base64.encodestring(hmac.new(self.secret_key + self.oauth_token_secret,s,hashlib.sha1).digest()).strip()
 
     def oauth_gen(self,method,url,iparams,headers):
