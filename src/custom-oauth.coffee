@@ -8,10 +8,10 @@ class CustomOAuth extends OAuth
     #console.t.log _signatureBase
 
     if /data%255B\d%255D/g.test _signatureBase
-      #_remain        = _signatureBase.split('%26').slice(1).join('%26')
+      _remain        = _signatureBase.split('%26').slice(1).join('%26')
       _signatureBase = replaceAfterEncode _signatureBase, @originalBody
-      console.t.log _signatureBase.substr 0, 10000 # + "%26" + _remain
-      return _signatureBase# + "%26" + _remain
+      #console.t.log _signatureBase + "%26" + _remain
+      return _signatureBase + "%26" + _remain
     else
       #console.t.log _signatureBase
       return _signatureBase
