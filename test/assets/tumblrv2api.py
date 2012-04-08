@@ -37,19 +37,27 @@ class TumblrAPI:
         """
         Creates the valid OAuth signature.
         """
+        f = open('test/assets/url-encoded-auth-before-quote.txt', 'w')
+        f.write(params['data[0]'])
+        f.close()
         #eg: POST&http%3A%2F%2Fapi.tumblr.com%2Fv2%2Fblog%2Fexample.tumblr.com%2Fpost
         s = method + '&'+ urllib.quote(uri).replace('/','%2F')+ '&' + '%26'.join(
             #escapes all the key parameters, we then strip and url encode these guys
             [urllib.quote(k) +'%3D'+ urllib.quote(params[k]).replace('/','%2F') for k in sorted(params.keys())]
         )
+
         s = s.replace('%257E','~')
-        print s
+        f = open('test/assets/url-encoded-auth.txt', 'w')
+        f.write(s)
+        f.close()
+
         return base64.encodestring(hmac.new(self.secret_key + self.oauth_token_secret,s,hashlib.sha1).digest()).strip()
 
     def oauth_gen(self,method,url,iparams,headers):
         """
         Creates the oauth parameters we're going to need to sign the body
         """
+        print iparams
         params = dict([(x[0], urllib.quote(str(x[1])).replace('/','%2F')) for x in iparams.iteritems()]) 
         params['oauth_consumer_key'] = self.consumer_key
         params['oauth_nonce'] = str(time.time())[::-1]
@@ -59,7 +67,6 @@ class TumblrAPI:
         params['oauth_token']= self.oauth_token
         params['oauth_signature'] = self.oauth_sig(method,'http://'+headers['Host'] + url, params)
         headers['Authorization' ] =  'OAuth ' + ',  '.join(['%s="%s"' %(k,v) for k,v in params.iteritems() if 'oauth' in k ])
-        print headers
     
     def _postOAuth(self,url,params={}):
         """
@@ -72,7 +79,7 @@ class TumblrAPI:
         conn = httplib.HTTPConnection(machine)
         #URL Encode the paramers and  make sure and kill any trailing slashes.
         conn.request('POST',uri,urllib.urlencode(params).replace('/','%2F'),headers);
-        f = open('test/url-encoded-image.txt', 'w')
+        f = open('test/assets/url-encoded-image.txt', 'w')
         f.write(urllib.urlencode(params).replace('/','%2F').replace('&type=photo', '').replace('data%5B0%5D=', ''))
         f.close()
         return conn.getresponse()

@@ -55,12 +55,15 @@ class Tumblr
 
   post: (content, callback)->
     if content.data?
+      @oauth.originalBody = {}
       if Array.isArray( content.data )
         for d, i in content.data
           content["data[#{i}]"] = encodeToHex(d)
+          @oauth.originalBody["data[#{i}]"] = encodeToHex(d)
         delete content.data
       else
         content[ 'data[0]' ] = encodeToHex(content.data)
+        @oauth.originalBody["data[0]"] = encodeToHex(content.data)
         delete content.data
     @oauth.post @getUrlFor('post'),
       @options.accessTokenKey,

@@ -1,6 +1,7 @@
 fs     = require('fs')
 Tumblr = require('./../src/tumblr')
 config = JSON.parse(fs.readFileSync('config.json'))
+photo  = fs.readFileSync('test/assets/small-photo.jpg')
 
 describe "Tumblr", ->
 
@@ -43,22 +44,23 @@ describe "Tumblr", ->
           'format'
           'reblog_key'
           'tags'
-          'highlighted'
           'note_count'
           'can_reply'
+          'highlighted'
           'liked'
         ]
         switch post.type
           when 'text'
-            keyList = keyList.concat ['title', 'body']
+            prop = 'body'
           when 'photo'
-            keyList = keyList.concat ['photos', 'caption']
+            prop = 'photos'
           when 'quote'
-            keyList = keyList.concat ['source_url', 'source_title', 'text', 'source']
-          when 'link'
-            keyList = keyList.concat ['title', 'url', 'description']
+            prop = 'source'
 
-        post.should.have.keys keyList
+          when 'link'
+            prop = 'url'
+
+        post.should.have.property prop
 
       done()
 
@@ -154,7 +156,25 @@ describe "Tumblr", ->
 
     postObj =
       type: 'photo'
-      data: fs.readFileSync('test/assets/photo.jpg')
+      data: fs.readFileSync('test/assets/small-photo.jpg')
+
+    encodedAuth = fs.readFileSync('test/assets/url-encoded-auth.txt').toString('utf-8')
+
+    @tumblr.post postObj, (err, data, response)=>
+      data = JSON.parse(data)
+      data.should.have.property('meta')
+      data.meta.should.have.property('status', 201)
+      data.meta.should.have.property('msg', 'Created')
+      data.response.should.have.property('id')
+      done()
+
+  ###
+  it "should create new Photoset Post", (done)->
+
+    postObj =
+      type: 'photo'
+      data: [ photo,
+              photo ]
 
     @tumblr.post postObj, (err, data, response)->
       data = JSON.parse(data)
@@ -163,4 +183,4 @@ describe "Tumblr", ->
       data.meta.should.have.property('msg', 'Created')
       data.response.should.have.property('id')
       done()
-
+  ###
