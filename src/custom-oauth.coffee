@@ -8,10 +8,20 @@ class CustomOAuth extends OAuth
     #console.t.log _signatureBase
 
     if /data%255B\d%255D/g.test _signatureBase
-      _remain        = _signatureBase.split('%26').slice(1).join('%26')
+      #_remain        = _signatureBase.split('%26').slice(1).join('%26')
       _signatureBase = replaceAfterEncode _signatureBase, @originalBody
-      #console.t.log _signatureBase + "%26" + _remain
-      return _signatureBase + "%26" + _remain
+      _signatureBase = _signatureBase.replace(/\//g, '%252F')
+                                     .replace(/\+/g, '%252B')
+                                     .replace(/\@/g, '%2540')
+                                     .replace(/\*/g, '%252A')
+                                     .replace(/\(/g, '%2528')
+                                     .replace(/\'/g, '%2527')
+                                     .replace(/\!/g, '%2521')
+                                     .replace(/\@/g, '%2540')
+                                     .replace(/\+/g, '%252B')
+      #require('fs').writeFileSync 'log.txt', _signatureBase + "%26" + _remain
+      #console.t.log _signatureBase
+      return _signatureBase # + "%26" + _remain
     else
       #console.t.log _signatureBase
       return _signatureBase
@@ -27,12 +37,9 @@ class CustomOAuth extends OAuth
     if ( not toEncode? ) or (toEncode is '')
       return ''
     else
+    
       if /data(\:|%5B)/g.test(toEncode)
         result = quote(toEncode.replace(/data( \:|%5B )/g, ''))
-        if /data\:/g.test(result)
-          result = result.replace(/%20/g, '+')
-        else if /data%5B/g.test(result)
-          result = result.replace(/\+/g, '%2520')
       else
         result = encodeURIComponent(toEncode)
       

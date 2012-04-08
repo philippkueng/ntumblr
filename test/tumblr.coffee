@@ -1,7 +1,8 @@
 fs     = require('fs')
 Tumblr = require('./../src/tumblr')
 config = JSON.parse(fs.readFileSync('config.json'))
-photo  = fs.readFileSync('test/assets/50-photo.jpg')
+photo  = fs.readFileSync('test/assets/5-photo.jpg')
+require('console-trace')
 
 describe "Tumblr", ->
 
@@ -156,7 +157,7 @@ describe "Tumblr", ->
 
     postObj =
       type: 'photo'
-      data: fs.readFileSync('test/assets/50-photo.jpg')
+      data: fs.readFileSync('test/assets/5-photo.jpg')
 
     encodedAuth = fs.readFileSync('test/assets/url-encoded-auth.txt').toString('utf-8')
 
