@@ -1,7 +1,7 @@
 fs     = require('fs')
 Tumblr = require('./../src/tumblr')
 config = JSON.parse(fs.readFileSync('config.json'))
-photo  = fs.readFileSync('test/assets/5-photo.jpg')
+photo  = fs.readFileSync('test/assets/50-photo.jpg')
 require('console-trace')
 
 describe "Tumblr", ->
@@ -127,7 +127,7 @@ describe "Tumblr", ->
     postObj =
       type: 'text'
       title: 'Edit Demo Post'
-      body: 'Having a nice day :D'
+      body: 'Having a nice day :D ! \' ( ) * - . _ ~'
 
     @tumblr.post postObj, (err, data, response)=>
       data = JSON.parse(data)
@@ -157,7 +157,7 @@ describe "Tumblr", ->
 
     postObj =
       type: 'photo'
-      data: fs.readFileSync('test/assets/5-photo.jpg')
+      data: fs.readFileSync('test/assets/50-photo.jpg')
 
     encodedAuth = fs.readFileSync('test/assets/url-encoded-auth.txt').toString('utf-8')
 
@@ -169,7 +169,6 @@ describe "Tumblr", ->
       data.response.should.have.property('id')
       done()
 
-  ###
   it "should create new Photoset Post", (done)->
 
     postObj =
@@ -184,4 +183,3 @@ describe "Tumblr", ->
       data.meta.should.have.property('msg', 'Created')
       data.response.should.have.property('id')
       done()
-  ###

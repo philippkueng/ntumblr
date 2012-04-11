@@ -115,7 +115,10 @@ __Requires `AccessTokenKey` and `AccessTokenSecret`__
 ### Test
 **Make sure you have got [access tokens](#access-token)**
 
+    # Create the url-strings first to check against
+    $ python test/assets/tumblrv2api.py test/assets/photo.jpg
     $ mocha
+    $ mocha test/tumblr # only test against tumblr
 
 ### Getting Access Tokens<a name="access-token"></a>
 

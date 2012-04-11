@@ -1,7 +1,7 @@
 fs          = require('fs')
 Tumblr      = require('./../src/tumblr')
 config      = JSON.parse(fs.readFileSync('config.json'))
-photo       = fs.readFileSync('test/assets/5-photo.jpg')
+photo       = fs.readFileSync('test/assets/50-photo.jpg')
 require('console-trace')
 
 
@@ -30,12 +30,12 @@ describe "encodeToHex", ->
       host: config.host
     
     
-    photo = fs.readFileSync('test/assets/5-photo.jpg' )
+    photo = fs.readFileSync('test/assets/50-photo.jpg' )
     @tumblr.oauth.originalBody =
       "data[0]": encodeToHex( photo )
 
     
-    photo.toString('binary').substr(0, 1000).should.equal fs.readFileSync('test/assets/5-photo.jpg' ).toString('binary').substr(0, 1000)
+    photo.toString('binary').substr(0, 1000).should.equal fs.readFileSync('test/assets/50-photo.jpg' ).toString('binary').substr(0, 1000)
 
     method        = "POST"
     url           = "http://api.tumblr.com/v2/blog/square.mnmly.com/post"

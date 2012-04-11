@@ -5,22 +5,15 @@ quote            = require('./escape-py').quote
 class CustomOAuth extends OAuth
   _createSignatureBase: ->
     _signatureBase = super
-    #console.t.log _signatureBase
-
+    
     if /data%255B\d%255D/g.test _signatureBase
-      #_remain        = _signatureBase.split('%26').slice(1).join('%26')
+      _remain        = _signatureBase.split('%26').splice(1).join('%26')
       _signatureBase = replaceAfterEncode _signatureBase, @originalBody
-      #require('fs').writeFileSync 'log.txt', _signatureBase + "%26" + _remain
-      #console.t.log _signatureBase
-      return _signatureBase # + "%26" + _remain
+      #console.t.log _signatureBase + "%26" + _remain
+      return _signatureBase  + "%26" + _remain
     else
       #console.t.log _signatureBase
       return _signatureBase
-
-    
-    # "data%5B0%5D%3Ddata%253A%25C3%25B"
-    #_signatureBase.replace(/%2B/g, '%2520')
-    #              .replace(/data%255B(\d+)%255D/gi, "data%5B$1%5D")
 
 
 
