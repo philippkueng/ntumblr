@@ -9,7 +9,7 @@ encodeURIComponent does not escape:
 ! ' ( ) * - . _ ~
 ###
 
-module.exports.quote = quote = (str)->
+quote = (str)->
   str = escape(str)
              .replace(/\%21/g, '!')
              .replace(/\%27/g, '\'')
@@ -22,18 +22,17 @@ module.exports.quote = quote = (str)->
      .replace(/@/g,  '%40')
      .replace(/\s/g, '%2B')
 
-module.exports.replaceMismatch = replaceMismatch = (str)->
+replaceMismatch = (str)->
   str.replace(/\!/g, "%21")
      .replace(/\'/g, "%27")
      .replace(/\(/g, "%28")
      .replace(/\)/g, "%29")
      .replace(/\*/g, "%2A")
   
-module.exports.doublequote = (str)->
-  _str = replaceMismatch( quote(str) )
-  replaceMismatch(quote(_str))
+doublequote = (str)->
+  replaceMismatch( quote(str) ).replace(/%/g, '%25')
   
-module.exports.unquote = (str)->
+unquote = (str)->
 
   unescape(str).replace(/\%21/g, '!')
                .replace(/\%27/g, '\'')
@@ -41,3 +40,29 @@ module.exports.unquote = (str)->
                .replace(/\%29/g, '\)')
                .replace(/\%7E/g, '\~')
                .replace(/\s/g,   '%2B')
+
+((name, definition) ->
+  # If this is amd
+  if typeof define is "function"
+    define definition
+  
+  # If this is node
+  else if typeof module isnt "undefined" and module.exports
+    console.log definition()
+    module.exports = definition()
+  # or browser
+  else
+    theModule = definition()
+    global = this
+    old = global[name]
+    theModule.noConflict = ->
+      global[name] = old
+      theModule
+
+    global[name] = theModule
+) "escapePy", ->
+  quote: quote
+  doublequote: doublequote
+  replaceMismatch: replaceMismatch
+  unquote: unquote
+
