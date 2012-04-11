@@ -10,15 +10,6 @@ class CustomOAuth extends OAuth
     if /data%255B\d%255D/g.test _signatureBase
       #_remain        = _signatureBase.split('%26').slice(1).join('%26')
       _signatureBase = replaceAfterEncode _signatureBase, @originalBody
-      _signatureBase = _signatureBase.replace(/\//g, '%252F')
-                                     .replace(/\+/g, '%252B')
-                                     .replace(/\@/g, '%2540')
-                                     .replace(/\*/g, '%252A')
-                                     .replace(/\(/g, '%2528')
-                                     .replace(/\'/g, '%2527')
-                                     .replace(/\!/g, '%2521')
-                                     .replace(/\@/g, '%2540')
-                                     .replace(/\+/g, '%252B')
       #require('fs').writeFileSync 'log.txt', _signatureBase + "%26" + _remain
       #console.t.log _signatureBase
       return _signatureBase # + "%26" + _remain

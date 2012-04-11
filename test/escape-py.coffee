@@ -14,7 +14,7 @@ describe "quote", ->
     escapeChars  = '+ \/ @'.split(' ')
     escapedChars = ['%2B', '%2F', '%40']
     for char, i in escapeChars
-      quote(char).should.not.equal(escapedChars[i])
+      quote(char).should.equal(escapedChars[i])
 
   it 'should not encode unicode', ->
     euro = '€'
