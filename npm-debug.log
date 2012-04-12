@@ -1,0 +1,118 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/Users/mnmly/.nvm/v0.6.14/bin/npm', 'publish' ]
+info using npm@1.1.12
+info using node@v0.6.14
+verbose config file /Users/mnmly/.npmrc
+verbose config file /Users/mnmly/.nvm/v0.6.14/etc/npmrc
+verbose config file /Users/mnmly/.nvm/v0.6.14/lib/node_modules/npm/npmrc
+verbose publish [ '.' ]
+verbose caching /Users/mnmly/Development/GitHub/ntumblr/package.json
+verbose loadDefaults ntumblr@0.0.4
+info prepublish ntumblr@0.0.4
+verbose cache add [ '.', null ]
+silly cache add: name, spec, args [ undefined, '.', [ '.', null ] ]
+verbose parsed url { pathname: '.', path: '.', href: '.' }
+verbose caching package.json
+verbose loadDefaults ntumblr@0.0.4
+verbose pack /Users/mnmly/Development/GitHub/ntumblr
+verbose pack /Users/mnmly/Development/GitHub/ntumblr /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/tmp.tgz
+silly makeList /Users/mnmly/Development/GitHub/ntumblr
+verbose caching /Users/mnmly/.nvm/v0.6.14/lib/node_modules/express/package.json
+verbose doing fancy crap /Users/mnmly/Development/GitHub/ntumblr/node_modules
+silly dir, dirLen [ '/Users/mnmly/Development/GitHub/ntumblr', 40 ]
+verbose tarball /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/tmp.tgz
+verbose parent /Users/mnmly/Development/GitHub/ntumblr
+verbose mkdir (expected) error ENOENT, stat '/var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package'
+verbose mkdir done: /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package 755
+verbose unpack_ uid, gid [ undefined, undefined ]
+verbose unpackTarget /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package
+silly gunzTarPerm modes [ '755', '644' ]
+verbose gunzed /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package
+verbose caching /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package/package.json
+verbose loadDefaults ntumblr@0.0.4
+verbose tarball contents [ 'package', 'tmp.tgz' ]
+verbose from cache /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package/package.json
+verbose pack /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package
+verbose pack /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package /Users/mnmly/.npm/ntumblr/0.0.4/package.tgz
+silly makeList /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package
+silly dir, dirLen [ '/var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package',
+silly dir, dirLen   108 ]
+verbose tarball /Users/mnmly/.npm/ntumblr/0.0.4/package.tgz
+verbose parent /var/folders/9c/8ffxyhwn1nx1jfmz7sl9q2c00000gn/T/npm-1334201413729/1334201413729-0.3593652283307165/package
+verbose mkdir (expected) error ENOENT, stat '/Users/mnmly/.npm/ntumblr/0.0.4/package'
+verbose mkdir done: /Users/mnmly/.npm/ntumblr/0.0.4/package 755
+verbose unpack_ uid, gid [ undefined, undefined ]
+verbose unpackTarget /Users/mnmly/.npm/ntumblr/0.0.4/package
+silly gunzTarPerm modes [ '755', '644' ]
+verbose gunzed /Users/mnmly/.npm/ntumblr/0.0.4/package
+verbose caching /Users/mnmly/.npm/ntumblr/0.0.4/package/package.json
+verbose loadDefaults ntumblr@0.0.4
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 40960
+silly updated sha bytes 284
+info shasum 3ded4fac7c7f918a4a4c2656a2ffaacb28d629ce
+info shasum /Users/mnmly/.npm/ntumblr/0.0.4/package.tgz
+verbose from cache /Users/mnmly/.npm/ntumblr/0.0.4/package/package.json
+verbose chmod /Users/mnmly/.npm/ntumblr/0.0.4/package.tgz 644
+verbose chown [ '/Users/mnmly/.npm/ntumblr/0.0.4/package.tgz', 501, 20 ]
+silly publish { name: 'ntumblr',
+silly publish   version: '0.0.4',
+silly publish   description: 'Tumblr REST client API for node.js.',
+silly publish   keywords: [ 'tumblr', 'oauth' ],
+silly publish   homepage: 'https://github.com/mnmly/ntumblr',
+silly publish   author: { name: 'mnmly' },
+silly publish   licenses: 
+silly publish    { type: 'MIT',
+silly publish      url: 'http://github.com/mnmly/ntumblr/raw/master/LICENSE' },
+silly publish   repository: { type: 'git', url: 'git://github.com/mnmly/ntumblr.git' },
+silly publish   dependencies: { oauth: '>=0.8.4' },
+silly publish   devDependencies: 
+silly publish    { 'coffee-script': '>= 1.0.0',
+silly publish      express: '>=2.5.8',
+silly publish      mocha: '>=1.0.0' },
+silly publish   engines: { node: '>=0.4.0 < 0.7.0' },
+silly publish   main: './index',
+silly publish   _npmUser: { name: 'mnmly', email: 'i.am@mnmly.com' },
+silly publish   _id: 'ntumblr@0.0.4',
+silly publish   optionalDependencies: {},
+silly publish   _engineSupported: true,
+silly publish   _npmVersion: '1.1.12',
+silly publish   _nodeVersion: 'v0.6.14',
+silly publish   _defaultsLoaded: true,
+silly publish   dist: 
+silly publish    { shasum: '3ded4fac7c7f918a4a4c2656a2ffaacb28d629ce',
+silly publish      tarball: 'http://registry.npmjs.org/ntumblr/-/ntumblr-0.0.4.tgz' } }
+verbose raw, before any munging ntumblr
+verbose url resolving [ 'https://registry.npmjs.org/', './ntumblr' ]
+verbose url resolved https://registry.npmjs.org/ntumblr
+http PUT https://registry.npmjs.org/ntumblr
+http 409 https://registry.npmjs.org/ntumblr
+verbose raw, before any munging ntumblr
+verbose url resolving [ 'https://registry.npmjs.org/', './ntumblr' ]
+verbose url resolved https://registry.npmjs.org/ntumblr
+http GET https://registry.npmjs.org/ntumblr
+http 200 https://registry.npmjs.org/ntumblr
+info Already published ntumblr@0.0.4
+verbose uploading bin dists []
+ERR! publish fail Cannot publish over existing version.
+ERR! publish fail Bump the 'version' field, set the --force flag, or
+ERR! publish fail     npm unpublish 'ntumblr@0.0.4'
+ERR! publish fail and try again
+ERR! 
+ERR! System Darwin 11.3.0
+ERR! command "node" "/Users/mnmly/.nvm/v0.6.14/bin/npm" "publish"
+ERR! cwd /Users/mnmly/Development/GitHub/ntumblr
+ERR! node -v v0.6.14
+ERR! npm -v 1.1.12
+ERR! code EPUBLISHCONFLICT
+ERR! message publish fail
+ERR! errno {}
+verbose exit [ 1, true ]

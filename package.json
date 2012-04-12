@@ -1,6 +1,6 @@
 { 
   "name": "ntumblr", 
-  "version": "0.0.4",
+  "version": "0.0.41",
   "description": "Tumblr REST client API for node.js.", 
   "keywords": ["tumblr","oauth"], 
   "homepage": "https://github.com/mnmly/ntumblr", 
