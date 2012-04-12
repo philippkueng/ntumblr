@@ -48,7 +48,6 @@ unquote = (str)->
   
   # If this is node
   else if typeof module isnt "undefined" and module.exports
-    console.log definition()
     module.exports = definition()
   # or browser
   else
