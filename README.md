@@ -122,10 +122,11 @@ __Requires `AccessTokenKey` and `AccessTokenSecret`__
 
 ### Getting Access Tokens<a name="access-token"></a>
 
-1. Copy `config-sample.json` to `config.json` and fill required fields
-2. Run simple server by `coffee server` then go to `http://localhost:3000` to allow the app.
-3. Check your `config.json`. it should have access tokens in place.
-4. You can run test by `$ mocha` :)
+1. Copy `config-sample.json` to `config.json`
+2. Get `consumerKey` and `consumerSecret` from [Tumblr](http://www.tumblr.com/oauth/apps), then add to the `config.json`
+3. Run simple server by `coffee server` then go to `http://localhost:3000` to allow the app.
+4. Check your `config.json`. it should have access tokens in place.
+5. You can run test by `$ mocha` :)
 
 
 -------------------------------------------------
