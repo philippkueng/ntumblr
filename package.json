@@ -21,7 +21,7 @@
     "express": ">=2.5.8",
     "mocha": ">=1.0.0",
     "should": "0.6.3",
-    "console-trace": "0.0.2"
+    "console-trace": "0.1.0"
   },
   "engines": {"node":">=0.4.0 < 0.7.0"}, 
   "main": "./index"
