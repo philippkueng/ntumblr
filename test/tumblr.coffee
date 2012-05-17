@@ -76,15 +76,22 @@ describe "Tumblr", ->
 
   it "should return only one text post", (done)->
 
-    filterParam =
+    postObj =
       type: 'text'
-      limit: 1
-    
-    @tumblr.get 'posts', filterParam, (err, data, response)->
-      post = JSON.parse(data).response.posts
-      post.should.have.lengthOf(1)
-      post[0].type.should.equal('text')
-      done()
+      title: 'Demo Post'
+      body: 'Demo Body'
+
+    @tumblr.post postObj, (err, data, response)=>
+
+      filterParam =
+        type: 'text'
+        limit: 1
+      
+      @tumblr.get 'posts', filterParam, (err, data, response)->
+        post = JSON.parse(data).response.posts
+        post.should.have.lengthOf(1)
+        post[0].type.should.equal('text')
+        done()
   
   it "should create new Text Post as draft", (done)->
     postObj =
